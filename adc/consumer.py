@@ -155,6 +155,9 @@ class Consumer:
 
         while len(active_partitions) > 0:
             messages = self._consumer.consume(batch_size, batch_timeout.total_seconds())
+            if len(messages) == 0:
+                self.logger.debug("Timeout expired; no messages read")
+                break
             try:
                 for m in messages:
                     err = m.error()
